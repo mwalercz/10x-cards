@@ -1,0 +1,19 @@
+---
+import '@/styles/globals.css'
+import Layout from '../layouts/Layout.astro';
+import { FlashcardGenerator } from '@/components/FlashcardGenerator';
+---
+
+<Layout title="Flashcard Generator">
+  <main class="min-h-screen bg-background">
+    <div class="container max-w-5xl">
+      <div class="py-12">
+        <div class="space-y-2 text-center">
+          <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl">AI Flashcard Generator</h1>
+          <p class="text-muted-foreground">Transform any text into interactive flashcards using AI.</p>
+        </div>
+        <FlashcardGenerator client:load />
+      </div>
+    </div>
+  </main>
+</Layout>
