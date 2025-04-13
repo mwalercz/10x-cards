@@ -24,7 +24,7 @@ Keep questions concise and answers detailed but not too long.`;
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'mistralai/mistral-7b-instruct',
+      model: 'google/gemini-2.0-flash-001',
       messages,
       temperature: 0.7,
       max_tokens: 1000,

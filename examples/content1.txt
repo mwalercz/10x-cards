@@ -1,0 +1,89 @@
+Reflection in artificial intelligence, notably used in large language models, specifically in Reasoning Language Models (RLMs), is the ability for an artificial neural network to provide top-down feedback to its input or previous layers, based on their outputs or subsequent layers. This process involves self-assessment and internal deliberation, aiming to enhance reasoning accuracy, minimize errors (like hallucinations), and increase interpretability. Reflection is a form of "test-time compute," where additional computational resources are used during inference.
+
+Introduction
+Traditional neural networks process inputs in a feedforward manner, generating outputs in a single pass. However, their limitations in handling complex reasoning tasks have led to the development of methods that simulate internal deliberation. Techniques such as chain-of-thought prompting encourage models to generate intermediate reasoning steps, thereby providing a form of self-reflection that can improve performance on tasks including arithmetic, commonsense reasoning, and more.
+
+This internal process of "thinking" about the steps leading to an answer is analogous to human metacognition or "thinking about thinking". It helps AI systems approach tasks that require multi-step reasoning, planning, and logical thought. The feedback can take place either after a full network pass and decoding to tokens, or continuously in latent space (the last layer can be fed back to the first layer).[1][2] In LLMs, special tokens can mark the beginning and end of reflection before producing a final response (e.g., <thinking>).
+
+Techniques
+Increasing the length of the Chain-of-Thought reasoning process, by passing the output of the model back to its input and doing multiple network passes, increases inference-time scaling.[3] Reinforcement learning frameworks have also been used to steer the Chain-of-Thought. One example is Group Relative Policy Optimization (GRPO), used in DeepSeek-R1,[4] a variant of policy gradient methods that eliminates the need for a separate "critic" model by normalizing rewards within a group of generated outputs, reducing computational cost. Architectural features like the Mixture-of-Experts (MoE) design and Multi-head Latent Attention, used in models like DeepSeek-V3, also contribute to efficiency, particularly for long contexts. Simple techniques like "budget forcing" (forcing the model to continue generating reasoning steps) have also proven effective in improving performance.[5]
+
+Types of reflection
+Post-hoc reflection
+Analyzes and critiques an initial output separately, often involving prompting the model to identify errors or suggest improvements after generating a response. The Reflexion framework follows this approach.[6][7]
+
+Iterative reflection
+Revises earlier parts of a response dynamically during generation. Self-monitoring mechanisms allow the model to adjust reasoning as it progresses. Methods like Tree-of-Thoughts exemplify this, enabling backtracking and alternative exploration.
+
+Intrinsic reflection
+Integrates self-monitoring directly into the model architecture rather than relying solely on external prompts, enabling models with inherent awareness of their reasoning limitations and uncertainties. This has been used by Google DeepMind in a technique called Self-Correction via Reinforcement Learning (SCoRe) which rewards the model for improving its responses.[8]
+
+Process reward models and limitations
+Early research explored PRMs to provide feedback on each reasoning step, unlike traditional reinforcement learning which rewards only the final outcome. However, PRMs have faced challenges, including computational cost and reward hacking. DeepSeek-R1's developers found them to be not beneficial.[9][10]
+
+Benchmarks
+Reflective models generally outperform non-reflective models in most benchmarks, especially on tasks requiring multi-step reasoning.
+
+However, some benchmarks exclude reflective models due to longer response times.
+
+Humanity's Last Exam
+The HLE, a rigorous benchmark designed to assess expert-level reasoning across mathematics, humanities, and the natural sciences, reveals substantial performance gaps among models. State-of-the-art reasoning models have demonstrated low accuracy on HLE, highlighting significant room for improvement. In particular, the full reasoning model o3 achieved an accuracy of 26.6%,[11] while its lighter counterpart, o3‑mini-high (evaluated on text‑only questions), reached 13%.[12]
+
+AIME
+The American Invitational Mathematics Examination (AIME) benchmark, a challenging mathematics competition, demonstrates significant performance differences between model types. Non-reasoning models typically solve less than 30% of AIME. In contrast, models employing reasoning techniques score between 50% and 80%.[13] While OpenAI's o1 maintained or slightly improved its accuracy from reported 2024[citation needed] metrics to 2025 AIME results, o3-mini (high) achieved a higher accuracy (80%) at a significantly lower cost (approximately 12 times cheaper).
+
+o3-mini performance
+According to OpenAI's January 2025 report on o3-mini, adjustable "reasoning effort" significantly affects performance, particularly in STEM. Increasing reasoning effort from low to high boosts accuracy on benchmarks like AIME 2024, GPQA Diamond, and Codeforces, providing performance gains typically in the range of 10-30%. With high reasoning effort, o3-mini (high) achieved 87.3% in AIME (different from the MathArena AIME benchmark results), 79.7% in GPQA Diamond, 2130 Elo in Codeforces, and 49.3 in SWE-bench Verified.[14]
+
+Integration with search capabilities
+In December 2024, Google introduced Deep Research in Gemini,[15] a feature in Gemini that conducts multi-step research tasks.
+
+On January 25, 2025, DeepSeek launched a feature in their DeepSeek R1 model, enabling the simultaneous use of search and reasoning capabilities, which allows for more efficient integration of data retrieval with reflective reasoning processes.
+
+Subsequently, OpenAI's o3-mini model gained the ability to combine search and reasoning in a unified process.
+
+On February 2, 2025, OpenAI released deep research,[16] a tool that integrates reasoning and web search in a unified workflow, allowing users to perform complex research tasks that require multi-step reasoning and data synthesis from multiple sources. It is based on o3 and can take from 5 to 30 minutes to generate comprehensive reports.[17]
+
+History
+2024
+o1-preview, an LLM with enhanced reasoning, was released in September 2024.[18] The full version, o1, followed in December 2024. OpenAI also began sharing results on its successor, o3.[19]
+
+The development of reasoning LLMs has illustrated what Rich Sutton termed the "bitter lesson": that general methods leveraging computation often outperform those relying on specific human insights.[20] For instance, some research groups, such as the Generative AI Research Lab (GAIR), initially explored complex techniques like tree search and reinforcement learning in attempts to replicate o1's capabilities. However, they found, as documented in their "o1 Replication Journey" papers, that knowledge distillation — training a smaller model to mimic o1's outputs – was surprisingly effective. This highlighted the power of distillation in this context.
+
+Alibaba also released reasoning versions of its Qwen LLMs.
+
+2025
+In January 2025, DeepSeek released R1, a model competitive with o1 at lower cost, highlighting the effectiveness of GRPO.[21] OpenAI subsequently released o3-mini, followed by Deep Research which is based on o3.[22] The power of distillation was further demonstrated by s1-32B, achieving strong performance with budget forcing and scaling techniques.[23]
+
+Applications
+Mathematical and logical reasoning
+Reflection enables LLMs to solve multi-step problems, demonstrated on benchmarks like FrontierMath,[24] GSM8K (mathematical word problems), GPQA Diamond (PhD-level Science Questions) and Big-Bench Hard (challenging reasoning tasks). A model might initially produce an incorrect solution but, through self-reflection, identify the flawed step and generate a corrected answer.
+
+Vision-language tasks
+Frameworks like R3V allow vision-language models to iteratively refine reasoning on complex multimodal tasks. In visual question answering, the model might first generate a plausible but incorrect answer based on a superficial understanding. Through reflection, it could identify inconsistencies between its answer and image details, leading to a revised, more accurate response.[25]
+
+General problem solving
+Enhanced reflection leads to improved coherence, long-term planning, and reduced hallucinations. This is valuable in tasks requiring planning, sequential decision-making, or creative problem-solving, like writing code, composing stories, or designing experiments.
+
+Models
+OpenAI
+o3 and o3-mini
+o1-preview and o1
+Gemini
+2.5 pro
+2.0 Flash Thinking Experimental
+DeepSeek
+R1 (based on V3)
+R1-Lite-Preview (test version based on V2.5)
+Qwen
+QvQ-72B-Preview — an experimental visual reasoning model launched on December 24, 2024, which integrates image understanding with verbal chain-of-thought reasoning.
+QwQ-32B-Preview — an experimental text-based reasoning model released in late November 2024 that emphasizes complex, step-by-step analysis.
+Anthropic
+Claude Sonnet 3.7 has an adjustable amount of 'thinking' tokens.
+xAI
+Grok 3
+Hugging Face
+OlympicCoder-7B & 32B, as part of reproducing the R1 training openly (Open R1 project).[26]
+Experiments
+Llama 3B scaling test-time compute
+On December 16, 2024, an experiment using a Llama 3B model demonstrated that by scaling test-time compute, a relatively small model could outperform a much larger Llama 70B model on challenging reasoning tasks. This result highlighted that improved inference strategies can unlock latent reasoning capabilities even in compact models.[27]
